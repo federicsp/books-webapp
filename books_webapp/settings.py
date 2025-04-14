@@ -56,7 +56,7 @@ ROOT_URLCONF = 'books_webapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], # Add templates directory to the list
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
