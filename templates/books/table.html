@@ -8,13 +8,36 @@
     </tr>
   </thead>
   <tbody>
-    {% for book in books %}
+    {% for book in page_obj %}
     <tr>
       <td>{{ book.titolo }}</td>
       <td>{{ book.anno_edizione }}</td>
       <td>{{ book.editore.ragione_sociale }}</td>
       <td>{{ book.autore.nome }} {{ book.autore.cognome }}</td>
     </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">Nessun libro disponibile.</td>
+      </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<!-- Paginazione -->
+<div class="pagination">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+      <a href="?page=1">&laquo; Prima</a>
+      <a href="?page={{ page_obj.previous_page_number }}">Precedente</a>
+    {% endif %}
+
+    <span class="current">
+      Pagina {{ page_obj.number }} di {{ page_obj.paginator.num_pages }}.
+    </span>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}">Successiva</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>
+    {% endif %}
+  </span>
+</div>
