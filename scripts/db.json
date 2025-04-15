@@ -4,19 +4,19 @@
          "titolo":"Le mille e 1 notte",
          "autore":1,
          "editore":2,
-         "anno_edizione":"2000"
+         "anno edizione":"2000"
       },
       {
          "titolo":"program in javascript",
          "autore":3,
          "editore":1,
-         "anno_edizione":"1876"
+         "anno edizione":"1876"
       },
       {
          "titolo":"MSDOS",
          "autore":2,
          "editore":2,
-         "anno_edizione":"2022"
+         "anno edizione":"2022"
       }
    ],
    "autori":[
@@ -39,12 +39,12 @@
    "editori":[
       {
          "id":1,
-         "ragione_sociale":"edizioni fantasia_1",
+         "ragione sociale":"edizioni fantasia_1",
          "indirizzo":"via di qua"
       },
       {
          "id":2,
-         "ragione_sociale":"program edition_2",
+         "ragione sociale":"program edition_2",
          "indirizzo":"streetlarg",
          "telefono":"0213456789"
       }
