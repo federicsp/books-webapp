@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from .models import Libro
 
+import json
+
 def home(request):
     return HttpResponse('Benvenuto nella pagina principale!')
 
@@ -22,27 +24,27 @@ def books_table(request):
     # Passa la pagina dei libri al template
     return render(request, 'books/table.html', {'page_obj': page_obj})
 
-# Aggiungi un libro
-def add_book(request):
-    if request.method == 'POST':
-        titolo = request.POST.get('titolo')
-        autore = request.POST.get('autore')
-        editore = request.POST.get('editore')
-        anno_edizione = request.POST.get('anno_edizione')
-
-        if titolo and autore and editore and anno_edizione:
-            Libro.objects.create(
-                titolo=titolo,
-                autore=autore,
-                editore=editore,
-                anno_edizione=anno_edizione
-            )
-            return HttpResponse('Libro aggiunto con successo!')  # Successo
-        else:
-            return HttpResponse('Dati incompleti. Per favore, completa tutti i campi.', status=400)  # Errore
-    return HttpResponseNotAllowed(['POST'])
-
-# Vista per ottenere tutti i libri in formato JSON
 def books(request):
-    books_list = Libro.objects.all().values('id', 'titolo', 'autore', 'editore', 'anno_edizione').order_by('anno_edizione')
-    return JsonResponse(list(books_list), safe=False)
+    if request.method == 'GET':
+        books_list = Libro.objects.all().values('id', 'titolo', 'autore', 'editore', 'anno_edizione').order_by('anno_edizione')
+        return JsonResponse(list(books_list), safe=False)
+
+    elif request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            if not isinstance(data, list):
+                return JsonResponse({'error': 'Deve essere una lista di libri'}, status=400)
+
+            books = []
+            for item in data:
+                if all(k in item for k in ('titolo', 'autore', 'editore', 'anno_edizione')):
+                    books.append(Libro(**item))
+                else:
+                    return JsonResponse({'error': 'Dati incompleti in un libro'}, status=400)
+
+            Libro.objects.bulk_create(books)
+            return JsonResponse({'message': f'{len(books)} libri aggiunti con successo!'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return HttpResponseNotAllowed(['GET', 'POST'])
